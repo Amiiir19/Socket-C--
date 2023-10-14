@@ -1,8 +1,36 @@
 #include <iostream>
 #include <cstring>
+#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netdb.h>
+
+using namespace std;
+
+string exec(string command)
+{
+    char buffer[128];
+    string result = "";
+
+    // Open pipe to file
+    FILE *pipe = popen(command.c_str(), "r");
+    if (!pipe)
+    {
+        return "popen failed!";
+    }
+
+    // read till end of process:
+    while (!feof(pipe))
+    {
+
+        // use buffer to read and add to result
+        if (fgets(buffer, 128, pipe) != NULL)
+            result += buffer;
+    }
+
+    pclose(pipe);
+    return result;
+}
 
 int main()
 {
@@ -42,9 +70,11 @@ int main()
         {
 
             system("firefox");
-            system("acpi");
+
+            // system("acpi");
             memset(buffer, 0, 1024);
-            strcpy(buffer, "Thanks");
+            string bufferstring = exec("acpi");
+             strcpy(buffer, bufferstring.c_str());
 
             // std::cout << "openinnng" << std::endl;
         }
