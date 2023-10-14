@@ -1,5 +1,5 @@
 #include "term.h"
-extern char buffer[1024];
+extern char buffer[10240];
 process_state_t socketClass::socket_init(int portNum)
 {
     process_state_t ret = FAILED;
@@ -103,10 +103,17 @@ process_state_t handleCommands::handleBuffer(socketClass *socketClass_t)
 int handleCommands::command()
 {
 
-    if (memcmp(buffer, "bat", 3) == 0)
+    if (memcmp(buffer, "battery", 7) == 0)
+    {
+        memset(buffer, 0, 10240);
+        string bufferstring = exec("acpi");
+        strcpy(buffer, bufferstring.c_str());
+    }
+
+    if (memcmp(buffer, "speed", 5) == 0)
     {
         memset(buffer, 0, 1024);
-        string bufferstring = exec("acpi");
+        string bufferstring = exec("fast");
         strcpy(buffer, bufferstring.c_str());
     }
 
@@ -120,10 +127,11 @@ int handleCommands::command()
     {
         return 0;
     }
+    return 1;
 }
 string handleCommands::exec(string command)
 {
-    char buffer[128];
+    char buffer[10240];
     string result = "";
     // Open pipe to file
     FILE *pipe = popen(command.c_str(), "r");

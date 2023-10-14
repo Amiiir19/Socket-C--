@@ -1,5 +1,5 @@
 #include "term.h"
-char buffer[1024] = {0};
+char buffer[10240] = {0};
 int state = 0;
 
 int main()
