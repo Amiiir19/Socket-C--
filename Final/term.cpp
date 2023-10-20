@@ -123,12 +123,33 @@ int handleCommands::command()
         string bufferstring = exec("firefox");
         strcpy(buffer, bufferstring.c_str());
     }
+    if (memcmp(buffer, "current", 7) == 0)
+    {
+        memset(buffer, 0, 1024);
+        string bufferstring = exec("pwd");
+        strcpy(buffer, bufferstring.c_str());
+    }
+    if (memcmp(buffer, "ip", 2) == 0)
+    {
+        memset(buffer, 0, 1024);
+        string bufferstring = exec("myip");
+        strcpy(buffer, bufferstring.c_str());
+    }
+    if (memcmp(buffer, "calc", 4) == 0)
+    {
+        memset(buffer, 0, 1024);
+        string bufferstring = exec("gnome-calculator");
+        strcpy(buffer, bufferstring.c_str());
+    }
+    
     if (memcmp(buffer, "end", 3) == 0)
     {
         return 0;
     }
     return 1;
 }
+
+
 string handleCommands::exec(string command)
 {
     char buffer[10240];
